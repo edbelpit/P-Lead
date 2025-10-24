@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Filtro de Empresas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg-gray-50 font-sans flex">
+
+    <!-- Sidebar -->
+    <aside class="w-63 min-h-screen bg-white shadow-md p-6 fixed left-0 top-0 z-10">
+        <h2 class="text-2xl font-bold text-blue-600 mb-8">P-LEAD</h2>
+        <nav class="flex flex-col gap-4">
+            <a href="/template/index.html" class="flex items-center gap-2 text-gray-700 font-medium hover:text-blue-600 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607Z" />
+                </svg>
+                <span>Filtro</span>
+            </a>
+
+            <a href="/template/lead.html" class="flex items-center gap-2 text-gray-700 font-medium hover:text-blue-600 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+                </svg>
+                <span>Leads</span>
+            </a>
+
+            <a href="/template/find.html" class="flex items-center gap-2 text-gray-700 font-medium hover:text-blue-600 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+                <span>Buscar Cnpj</span>
+            </a>
+
+        </nav>
+    </aside>
+
+    <!-- Conteúdo principal -->
+    <main class="ml-[9rem] w-full p-6">
+
+        <h1 class="text-4xl font-semibold tracking-wide text-center mb-8 text-gray-800">Filtro de Empresas</h1>
+
+        <div class="mt-8 mx-auto bg-white p-6 rounded-lg shadow-lg" style="max-width: 70rem;">
+            <!-- UF e Município lado a lado -->
+            <div class="mb-4 flex gap-4">
+                <div class="w-1/2">
+                    <label for="uf" class="block text-gray-700 font-medium tracking-wide mb-1">*UF:</label>
+                    <select id="uf" class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <!-- Carregado via JS -->
+                    </select>
+                </div>
+
+                <div class="w-1/2">
+                    <label for="municipio" class="block text-gray-700 font-medium tracking-wide mb-1">Município:</label>
+                    <select id="municipio" class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <!-- Carregado via JS -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Container dos filtros em linha -->
+            <div class="flex flex-wrap gap-4 mb-4">
+                <!-- Seção CNAE -->
+                <div class="flex-1 min-w-[200px]">
+                    <label for="secaoSelect" class="block text-gray-700 font-medium tracking-wide mb-1">*Seção CNAE:</label>
+                    <select id="secaoSelect" onchange="carregarDivisoesPorSecao()"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Selecione uma Seção</option>
+                    </select>
+                </div>
+
+                <!-- Divisão CNAE -->
+                <div class="flex-1 min-w-[200px]">
+                    <label for="divisaoSelect" class="block text-gray-700 font-medium tracking-wide mb-1">Divisão CNAE:</label>
+                    <select id="divisaoSelect" onchange="carregarGruposPorDivisao()"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" disabled>
+                        <option value="">Selecione uma Divisão</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Filtros CNAE lado a lado -->
+            <div class="mb-4 flex flex-col sm:flex-row gap-4">
+                <div class="w-full sm:w-1/3">
+                    <label for="grupoSelect" class="block text-gray-700 font-medium tracking-wide mb-1">Grupo CNAE:</label>
+                    <select id="grupoSelect" onchange="carregarClassesPorGrupo()" class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" disabled>
+                        <option value="">Selecione um Grupo</option>
+                    </select>
+                </div>
+                <div class="w-full sm:w-1/3">
+                    <label for="classeSelect" class="block text-gray-700 font-medium tracking-wide mb-1">Classe CNAE:</label>
+                    <select id="classeSelect" onchange="carregarSubclassesPorClasse()" class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" disabled>
+                        <option value="">Selecione uma Classe</option>
+                    </select>
+                </div>
+                <div class="w-full sm:w-1/3">
+                    <label for="cnaeSelect" class="block text-gray-700 font-medium tracking-wide mb-1">Código CNAE:</label>
+                    <select id="cnaeSelect" class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" disabled>
+                        <option value="">Selecione um CNAE</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Situação Cadastral e Faixa de Capital Social -->
+            <div class="mb-4 flex gap-4">
+                <div class="w-1/3">
+                    <label for="situacao" class="block text-gray-700 font-medium tracking-wide mb-1">Situação Cadastral:</label>
+                    <select id="situacao" class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="02">ATIVA</option>
+                        <option value="">Todas</option>
+                        <option value="01">NULA</option>    
+                        <option value="03">SUSPENSA</option>
+                        <option value="04">INAPTA</option>
+                        <option value="08">BAIXADA</option>
+                    </select>
+                </div>
+
+                <div class="w-1/3">
+                    <label for="faixaCapitalMin" class="block text-gray-700 font-medium tracking-wide mb-1">Capital Social Mínimo:</label>
+                    <select id="faixaCapitalMin" class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm">
+                        <option value="">Todos</option>
+                        <option value="1">R$ 1</option>
+                        <option value="1000">R$ 1.000</option>
+                        <option value="10000">R$ 10.000</option>
+                        <option value="100000">R$ 100.000</option>
+                        <option value="1000000">R$ 1.000.000</option>
+                        <option value="10000000">R$ 10.000.000</option>
+                        <option value="100000000">R$ 100.000.000</option>
+                        <option value="1000000000">R$ 1.000.000.000</option>
+                        <option value="10000000000">R$ 10.000.000.000</option>
+                        <option value="100000000000">R$ 100.000.000.000</option>
+                        <option value="1000000000000">R$ 1.000.000.000.000</option>
+                    </select>
+                </div>
+
+                <div class="w-1/3">
+                    <label for="faixaCapitalMax" class="block text-gray-700 font-medium tracking-wide mb-1">Capital Social Máximo:</label>
+                    <select id="faixaCapitalMax" class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm">
+                        <option value="">Todos</option>
+                        <option value="1">R$ 1</option>
+                        <option value="1000">R$ 1.000</option>
+                        <option value="10000">R$ 10.000</option>
+                        <option value="100000">R$ 100.000</option>
+                        <option value="1000000">R$ 1.000.000</option>
+                        <option value="10000000">R$ 10.000.000</option>
+                        <option value="100000000">R$ 100.000.000</option>
+                        <option value="1000000000">R$ 1.000.000.000</option>
+                        <option value="10000000000">R$ 10.000.000.000</option>
+                        <option value="100000000000">R$ 100.000.000.000</option>
+                        <option value="1000000000000">R$ 1.000.000.000.000</option>
+                    </select>
+                </div>
+
+                <div class="w-1/3">
+                    <label for="tipoUnidade" class="block text-gray-700 font-medium tracking-wide mb-1">Tipo de Unidade:</label>
+                    <select id="tipoUnidade" class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="1">Matriz</option>
+                        <option value="">Todas</option>
+                        <option value="2">Filial</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <!-- Container que muda de alinhamento dinamicamente -->
+            <div id="botoes-container" class="flex justify-center gap-4 mt-6 transition-all duration-300">
+                <!-- Botão Limpar Filtros com SVG -->
+                <button id="limparBtn" onclick="limparFiltros()"
+                   class="flex items-center"  title="Limpar Filtros">
+                    
+                    <!-- Ícone SVG (estilo limpo) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" 
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                        class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" 
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 
+                            3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 
+                            9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 
+                            3.182m0-4.991v4.99" />
+                    </svg>
+                </button>
+                <!-- Botão Buscar -->
+                <button id="consultarBtn" 
+                    class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    Buscar
+                </button>   
+
+                <!-- Botão Salvar Consulta (inicialmente hidden, aparecerá dinamicamente) -->
+                <button id="btnSalvarConsulta" onclick="abrirModalSalvarLead()"
+                    class="hidden px-6 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                    💾 Salvar Consulta
+                </button>
+                
+            </div>
+            <div class="flex justify-center mt-4">
+                <span id="paginacao-top" class="text-gray-600 self-center text-sm"></span>
+            </div>
+
+            <!-- Modal -->
+            <div id="modalSalvarLead" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+                <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+                    <label for="nomeLead" class="text-sm text-gray-600">Salvar em lista existente ou criar nova:</label>
+                    <select id="listaExistente" onchange="onSelecionarListaExistente()"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Criar nova lista</option>
+                        <!-- Preenchido via JS -->
+                    </select>
+                    <input id="nomeLead" type="text" placeholder="Nome da nova lista"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <!-- Novo contador de selecionados -->
+                    <div class="flex justify-center mt-1 mb-3 text-sm text-gray-700 gap-1">
+                        <span id="contadorSelecionados">0</span>
+                        <span>dados selecionados</span>
+                    </div>
+
+
+
+                    <div class="flex justify-center gap-4">
+                        <button onclick="fecharModalSalvarLead()" class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
+                        <button onclick="salvarConsulta()" class="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Salvar</button>
+                    </div>
+                </div>
+            </div>
+
+
+            </div>
+        </div>
+
+        <!-- Loader -->
+        <div id="loading" class="flex justify-center mt-6 hidden">
+            <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-blue-500 border-solid"></div>
+        </div>
+
+        <!-- Tabela de resultados -->
+        <div class="mt-8 mx-auto bg-white p-6 rounded-xl shadow-xl border border-gray-200 overflow-auto" style="max-width: 70rem; overflow: visible;">
+            <table id="resultado" class="w-full table-auto border-collapse text-sm text-gray-700">
+                    <thead class="bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider overflow-visible">
+                        <th id="colunaSelecionar" class="px-3 py-2 border-b hidden relative overflow-visible">
+                            <div class="flex items-center gap-1">
+                                <input 
+                                    type="checkbox" 
+                                    id="selectAll" 
+                                    onclick="selecionarTodos(this)"
+                                >
+                                <!-- Tooltip customizado -->
+                                <div class="relative group cursor-pointer overflow-visible">
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                        fill="none" viewBox="0 0 24 24" 
+                                        stroke-width="1.5" 
+                                        stroke="currentColor" 
+                                        class="w-5 h-5 text-gray-500">
+                                        <path stroke-linecap="round" stroke-linejoin="round" 
+                                            d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021
+                                                M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z
+                                                m-9-3.75h.008v.008H12V8.25Z" />
+                                    </svg>
+
+                                    <!-- Tooltip visível no hover -->
+                                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 w-64 text-xs text-white bg-gray-700 px-2 py-1 rounded 
+                                                opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
+                                        Selecionar todas as consultas listadas na tela
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+
+
+                        <th class="px-3 py-2 border-b">CNPJ</th>
+                        <th class="px-3 py-2 border-b">Empresa</th>
+                        <th class="px-3 py-2 border-b">Capital Social</th>
+                        <th class="px-3 py-2 border-b">Classe</th>
+                        <th class="px-3 py-2 border-b">
+                            <div class="flex items-center justify-between gap-2">
+                                <span>CNAE</span>
+                               
+                                <div class="flex items-center gap-1">
+                                    <select id="qtdPorPagina" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="150">150</option>
+                                        <option value="200">200</option>
+                                        <option value="250">250</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex items-center gap-1">
+                                    <button onclick="mudarPagina(-1)" title="Página anterior" class="text-black">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                                        </svg>
+                                    </button>
+                                    <button onclick="mudarPagina(1)" title="Próxima página" class="text-black">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="px-3 py-2 border-b hidden">Tipo Unidade</th>
+                        <th class="px-3 py-2 border-b hidden">Situação</th>
+                        <th class="px-3 py-2 border-b hidden">Telefone</th>
+                        <th class="px-3 py-2 border-b hidden">E-mail</th>
+                    </tr>
+                </thead>
+                <tbody id="resultado-body" class="divide-y divide-gray-100">
+                    <!-- Resultados serão inseridos aqui via JavaScript -->
+                    <tr class="invisible">
+                        <td class="px-3 py-2 whitespace-nowrap border-b">00.000.000</td>
+                        <td class="px-3 py-2 break-words border-b">EMPRESA EX</td>
+                        <td class="px-3 py-2 whitespace-nowrap border-b">R$ 000.000.000,00</td>
+                        <td class="px-3 py-2 break-words border-b">EXEMPLO CNAE</td>
+                        <td class="px-3 py-2 break-words border-b">Distribuição de energia elétrica</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Paginação -->
+            <div id="paginacao-container" class="flex justify-center mt-4 hidden">
+                <div class="flex gap-4 items-center">
+                    <button id="anterior" onclick="mudarPagina(-1)" aria-label="Página anterior" class="w-10 h-10 bg-gray-300 rounded-full hover:bg-gray-400 disabled:opacity-30 flex items-center justify-center transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+
+                    <span id="paginacao" class="text-gray-600 self-center text-sm"></span>
+
+                    <button id="proximo" onclick="mudarPagina(1)" aria-label="Próxima página" class="w-10 h-10 bg-gray-300 rounded-full hover:bg-gray-400 disabled:opacity-30 flex items-center justify-center transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+
+                    <!-- Botão Exportar CSV -->
+                    <button onclick="exportarParaCSV()" aria-label="Exportar CSV" class="w-10 h-10 bg-green-500 rounded-full hover:bg-green-600 flex items-center justify-center transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6M4 6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
+                        </svg>
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+
+    </main>
+
+    
+    <script src="/static/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+.rtc-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+.rtc-wrapper::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
